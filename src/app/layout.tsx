@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DotNet Shopper",
   description: "Created by NikDevRych",
 };
+
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
@@ -13,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${roboto.className} antialiased`}>{children}</body>
     </html>
   );
 }
