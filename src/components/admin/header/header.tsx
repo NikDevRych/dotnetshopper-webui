@@ -1,8 +1,8 @@
-export default function AdminHeader() {
+export default function AdminHeader({ onClick }: { onClick: () => void }) {
   return (
     <header className="bg-gray-900">
       <div className="flex h-14 items-center justify-between gap-2 pl-20 pr-20">
-        <button>
+        <button onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="40px"
