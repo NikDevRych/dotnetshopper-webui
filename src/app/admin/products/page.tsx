@@ -1,4 +1,5 @@
 import ProductItem from "@/components/admin/product-item/product-item";
+import Link from "next/link";
 
 export default function AdminProductsPage() {
   return (
@@ -11,7 +12,7 @@ export default function AdminProductsPage() {
           <li className="w-20">Edit</li>
           <li className="w-20">Remove</li>
         </ul>
-        <div className="h-0.5 rounded-xl w-[51rem] bg-gray-200"></div>
+        <div className="h-0.5 w-[51rem] rounded-xl bg-gray-200"></div>
         <ul className="flex flex-col items-center gap-5">
           <ProductItem />
           <ProductItem />
@@ -20,6 +21,9 @@ export default function AdminProductsPage() {
           <ProductItem />
           <ProductItem />
         </ul>
+        <Link href="/admin/products/create">
+          <button className="w-40 rounded-md p-2 shadow-md">Create</button>
+        </Link>
       </div>
     </>
   );
