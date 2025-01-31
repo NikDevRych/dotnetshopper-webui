@@ -1,20 +1,23 @@
+import { Product } from "@/interfaces/product";
 import Image from "next/image";
 
-export default function Card() {
+export default function Card({ product }: Readonly<{ product: Product }>) {
   return (
     <li className="flex w-56 flex-col gap-2 rounded-md p-2 shadow-md">
       <div className="flex justify-center">
         <Image src="/test_img_01.jpg" alt="product" width={200} height={200} />
       </div>
-      <span className="text-wrap">Product Name is best name of name</span>
+      <span className="text-wrap">{product.name}</span>
       <div className="flex items-baseline gap-2">
-        <div className="text-lg font-bold text-red-600">
-          <span>$</span>
-          <span>399</span>
-        </div>
+        {product.isSale ? (
+          <div className="text-lg font-bold text-red-600">
+            <span>$</span>
+            <span>{product.salePrice}</span>
+          </div>
+        ) : null}
         <div className="line-through">
           <span>$</span>
-          <span>500</span>
+          <span>{product.price}</span>
         </div>
       </div>
       <button className="flex items-center justify-center gap-2 rounded-md bg-blue-500 p-1 text-blue-50">
