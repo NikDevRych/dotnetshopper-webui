@@ -14,7 +14,20 @@ export default function AdminProductCreate() {
     handleSubmit,
     formState: { errors },
   } = useForm<ProductInput>();
-  const onSubmit: SubmitHandler<ProductInput> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<ProductInput> = async (data) => {
+    try {
+      await fetch("http://localhost:5063/api/product", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      // TODO: change to error message in UI
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -22,6 +35,7 @@ export default function AdminProductCreate() {
       <span className="text-2xl font-bold text-gray-600">
         General Product information:
       </span>
+
       <form
         className="mt-4 flex flex-col gap-4 text-gray-600"
         onSubmit={handleSubmit(onSubmit)}
@@ -42,6 +56,7 @@ export default function AdminProductCreate() {
             {...register("name", { required: true })}
           />
         </div>
+
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <label className="text-xl" htmlFor="price">
@@ -58,12 +73,14 @@ export default function AdminProductCreate() {
             {...register("price", { required: true })}
           />
         </div>
+
         <div className="flex flex-col gap-1">
           <label className="text-xl" htmlFor="picture">
             Product picture <span className="text-red-800">*</span>
           </label>
           <input type="file" name="picture" id="picture" />
         </div>
+
         <div className="flex items-center gap-2">
           <input
             className="h-10 rounded-md border"
@@ -75,6 +92,7 @@ export default function AdminProductCreate() {
             Product is active <span className="text-red-800">*</span>
           </label>
         </div>
+
         <button type="submit" className="rounded-md p-2 shadow-md">
           Save
         </button>
