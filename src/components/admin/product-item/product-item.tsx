@@ -1,19 +1,22 @@
+import { Product } from "@/interfaces/product";
 import Image from "next/image";
 
-export default function ProductItem() {
+export default function ProductItem({
+  product,
+}: Readonly<{ product: Product }>) {
   return (
     <li>
-      <ul className="flex items-center justify-center gap-5 p-2 shadow-md rounded-md">
+      <ul className="flex items-center justify-center gap-5 rounded-md p-2 shadow-md">
         <li className="w-20">
           <Image
-            src="/test_img_01.jpg"
+            src={product.imageUrl}
             width={80}
             height={80}
             alt="product-image"
           />
         </li>
-        <li className="w-80">Product Name Maybe Long or not</li>
-        <li className="w-40">40000$</li>
+        <li className="w-80">{product.name}</li>
+        <li className="w-40">{product.price}$</li>
         <li className="w-20">
           <button>
             <svg

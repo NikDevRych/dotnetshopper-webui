@@ -1,4 +1,4 @@
-import ProductItem from "@/components/admin/product-item/product-item";
+import ProductList from "@/components/admin/product-item/product-list";
 import Link from "next/link";
 
 export default function AdminProductsPage() {
@@ -14,12 +14,7 @@ export default function AdminProductsPage() {
         </ul>
         <div className="h-0.5 w-[51rem] rounded-xl bg-gray-200"></div>
         <ul className="flex flex-col items-center gap-5">
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
+          <ProductList />
         </ul>
         <Link href="/admin/products/create">
           <button className="w-40 rounded-md p-2 shadow-md">Create</button>
