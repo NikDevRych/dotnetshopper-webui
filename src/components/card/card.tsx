@@ -9,23 +9,10 @@ export default function Card({ product }: Readonly<{ product: Product }>) {
       </div>
       <span className="text-wrap">{product.name}</span>
       <div className="flex items-baseline gap-2">
-        {product.isSale ? (
-          <>
-            <div className="text-lg font-bold text-red-600">
-              <span>$</span>
-              <span>{product.salePrice}</span>
-            </div>
-            <div className="line-through">
-              <span>$</span>
-              <span>{product.price}</span>
-            </div>
-          </>
-        ) : (
-          <div className="text-lg font-bold">
-            <span>$</span>
-            <span>{product.price}</span>
-          </div>
-        )}
+        <div className="text-lg font-bold">
+          <span>$</span>
+          <span>{product.price}</span>
+        </div>
       </div>
       <button className="flex items-center justify-center gap-2 rounded-md bg-blue-500 p-1 text-blue-50">
         <svg
