@@ -5,7 +5,7 @@ export default function Card({ product }: Readonly<{ product: Product }>) {
   return (
     <li className="flex w-56 flex-col gap-2 rounded-md p-2 shadow-md">
       <div className="flex justify-center">
-        <Image src="/test_img_01.jpg" alt="product" width={200} height={200} />
+        <Image src={product.imageUrl} alt="product" width={200} height={200} priority />
       </div>
       <span className="text-wrap">{product.name}</span>
       <div className="flex items-baseline gap-2">

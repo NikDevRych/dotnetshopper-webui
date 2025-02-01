@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 type ProductInput = {
   name: string;
   price: number;
+  imageUrl: string | null;
   isActive: boolean;
 };
 
@@ -47,7 +48,7 @@ export default function AdminProductCreate() {
 
         // TODO: send to server like imageUrl
         imagePath = `http://127.0.0.1:9000/products/${imageFile[0].name.trim()}`;
-        console.log(imagePath);
+        data.imageUrl = imagePath;
       }
 
       await fetch("http://localhost:5063/api/product", {
@@ -69,7 +70,7 @@ export default function AdminProductCreate() {
       <span className="text-2xl font-bold text-gray-600">
         General Product information:
       </span>
-      
+
       <form
         className="mt-4 flex flex-col gap-4 text-gray-600"
         onSubmit={handleSubmit(onSubmit)}
