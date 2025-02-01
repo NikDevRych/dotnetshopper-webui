@@ -1,5 +1,7 @@
 "use client";
 
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type ProductInput = {
@@ -8,7 +10,20 @@ type ProductInput = {
   isActive: boolean;
 };
 
+// TODO: remove from this file, create service and read from .env
+const s3 = new S3Client({
+  region: "us-east-1",
+  endpoint: "http://127.0.0.1:9000",
+  forcePathStyle: true,
+  requestChecksumCalculation: "WHEN_REQUIRED",
+  credentials: {
+    accessKeyId: "tLQFyEyn8BR7n0UhNJOG",
+    secretAccessKey: "7SRa2PwmznTonElpmj6hNeJrR2jwhGz21MQ6owwn",
+  },
+});
+
 export default function AdminProductCreate() {
+  const [imageFile, setImageFile] = useState<FileList | null>();
   const {
     register,
     handleSubmit,
@@ -16,6 +31,25 @@ export default function AdminProductCreate() {
   } = useForm<ProductInput>();
   const onSubmit: SubmitHandler<ProductInput> = async (data) => {
     try {
+      let imagePath: string | null;
+      if (imageFile != null) {
+        const response = await s3.send(
+          new PutObjectCommand({
+            Bucket: "products",
+            Key: `${imageFile[0].name.trim()}`,
+            Body: imageFile[0],
+          }),
+        );
+
+        if (response.$metadata.httpStatusCode != 200) {
+          throw new Error("Image not uploaded!");
+        }
+
+        // TODO: send to server like imageUrl
+        imagePath = `http://127.0.0.1:9000/products/${imageFile[0].name.trim()}`;
+        console.log(imagePath);
+      }
+
       await fetch("http://localhost:5063/api/product", {
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +69,7 @@ export default function AdminProductCreate() {
       <span className="text-2xl font-bold text-gray-600">
         General Product information:
       </span>
-
+      
       <form
         className="mt-4 flex flex-col gap-4 text-gray-600"
         onSubmit={handleSubmit(onSubmit)}
@@ -78,7 +112,13 @@ export default function AdminProductCreate() {
           <label className="text-xl" htmlFor="picture">
             Product picture <span className="text-red-800">*</span>
           </label>
-          <input type="file" name="picture" id="picture" />
+          <input
+            type="file"
+            name="picture"
+            id="picture"
+            accept="image/jpeg, image/png"
+            onChange={(e) => setImageFile(e.target.files)}
+          />
         </div>
 
         <div className="flex items-center gap-2">
