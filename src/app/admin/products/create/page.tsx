@@ -1,6 +1,5 @@
 "use client";
 
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -11,18 +10,6 @@ type ProductInput = {
   isActive: boolean;
 };
 
-// TODO: remove from this file, create service and read from .env
-const s3 = new S3Client({
-  region: "us-east-1",
-  endpoint: "http://127.0.0.1:9000",
-  forcePathStyle: true,
-  requestChecksumCalculation: "WHEN_REQUIRED",
-  credentials: {
-    accessKeyId: "tLQFyEyn8BR7n0UhNJOG",
-    secretAccessKey: "7SRa2PwmznTonElpmj6hNeJrR2jwhGz21MQ6owwn",
-  },
-});
-
 export default function AdminProductCreate() {
   const [imageFile, setImageFile] = useState<FileList | null>();
   const {
@@ -30,25 +17,19 @@ export default function AdminProductCreate() {
     handleSubmit,
     formState: { errors },
   } = useForm<ProductInput>();
+
   const onSubmit: SubmitHandler<ProductInput> = async (data) => {
     try {
-      let imagePath: string | null;
       if (imageFile != null) {
-        const response = await s3.send(
-          new PutObjectCommand({
-            Bucket: "products",
-            Key: `${imageFile[0].name.trim()}`,
-            Body: imageFile[0],
-          }),
-        );
+        const formData = new FormData();
+        formData.append("image", imageFile[0]);
 
-        if (response.$metadata.httpStatusCode != 200) {
-          throw new Error("Image not uploaded!");
-        }
-
-        // TODO: send to server like imageUrl
-        imagePath = `http://127.0.0.1:9000/products/${imageFile[0].name.trim()}`;
-        data.imageUrl = imagePath;
+        await fetch("/api/image", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((res) => (data.imageUrl = res.imagePath));
       }
 
       await fetch("http://localhost:5063/api/product", {
