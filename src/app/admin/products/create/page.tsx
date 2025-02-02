@@ -12,6 +12,8 @@ type ProductInput = {
 
 export default function AdminProductCreate() {
   const [imageFile, setImageFile] = useState<FileList | null>();
+  const [imageUploadError, setImageUploadError] = useState(false);
+  const [uploadProductError, setUploadProductError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -20,17 +22,7 @@ export default function AdminProductCreate() {
 
   const onSubmit: SubmitHandler<ProductInput> = async (data) => {
     try {
-      if (imageFile != null) {
-        const formData = new FormData();
-        formData.append("image", imageFile[0]);
-
-        await fetch("/api/image", {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then((res) => (data.imageUrl = res.imagePath));
-      }
+      if (imageFile != null) data.imageUrl = await uploadImage();
 
       await fetch("http://localhost:5063/api/product", {
         headers: {
@@ -40,9 +32,25 @@ export default function AdminProductCreate() {
         body: JSON.stringify(data),
       });
     } catch (error) {
-      // TODO: change to error message in UI
-      console.log(error);
+      setUploadProductError(true);
     }
+  };
+
+  const uploadImage = async (): Promise<string> => {
+    if (!imageFile) {
+      setImageUploadError(true);
+      throw new Error("Image file is null!");
+    }
+
+    const formData = new FormData();
+    formData.append("image", imageFile[0]);
+
+    const response = await fetch("/api/image", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+    setImageUploadError(true);
+    return response.imagePath;
   };
 
   return (
@@ -66,7 +74,7 @@ export default function AdminProductCreate() {
             )}
           </div>
           <input
-            className="h-10 rounded-md border"
+            className="h-10 rounded-md border p-1"
             type="text"
             id="name"
             {...register("name", { required: true })}
@@ -83,7 +91,7 @@ export default function AdminProductCreate() {
             )}
           </div>
           <input
-            className="h-10 rounded-md border"
+            className="h-10 rounded-md border p-1"
             type="text"
             id="price"
             {...register("price", { required: true })}
@@ -91,9 +99,14 @@ export default function AdminProductCreate() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="text-xl" htmlFor="picture">
-            Product picture <span className="text-red-800">*</span>
-          </label>
+          <div className="flex items-center gap-2">
+            <label className="text-xl" htmlFor="picture">
+              Product picture <span className="text-red-800">*</span>
+            </label>
+            {imageUploadError && (
+              <span className="text-red-800">Image upload error!</span>
+            )}
+          </div>
           <input
             type="file"
             name="picture"
@@ -118,6 +131,14 @@ export default function AdminProductCreate() {
         <button type="submit" className="rounded-md p-2 shadow-md">
           Save
         </button>
+
+        {uploadProductError && (
+          <div className="flex justify-center">
+            <span className="text-xl font-bold text-red-800">
+              Product upload error!
+            </span>
+          </div>
+        )}
       </form>
     </div>
   );
