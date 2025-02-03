@@ -1,3 +1,5 @@
+import CardList from "@/components/card-list.tsx/card-list";
+
 export default function Home() {
-  return <h1>Hello world!</h1>;
+  return <CardList />;
 }

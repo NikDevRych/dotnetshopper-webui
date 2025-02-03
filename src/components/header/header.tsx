@@ -16,14 +16,14 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <AppBar position="static" sx={{ bgcolor: "#424242" }}>
+    <AppBar position="sticky" sx={{ bgcolor: "#424242" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Link href="/" style={{ color: "white", textDecorationColor: "white" }}>
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
             <Image
               style={{
                 borderStyle: "solid",
-                borderWidth: "1",
+                borderWidth: "1px",
                 borderColor: "white",
                 borderRadius: "100%",
               }}
