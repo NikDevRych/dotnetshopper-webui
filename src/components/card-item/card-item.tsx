@@ -12,7 +12,7 @@ import Image from "next/image";
 
 export default function CardItem() {
   return (
-    <Card sx={{ width: "240px" }}>
+    <Card sx={{ width: "240px" }} elevation={2}>
       <CardMedia>
         <Image src="/laptop.webp" width={240} height={240} alt="product-item" />
       </CardMedia>
