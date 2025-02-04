@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <AppBar position="sticky" sx={{ bgcolor: "#424242" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Link href="/" style={{ color: "white", textDecorationColor: "white" }}>
+        <Link href="/">
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
             <Image
               style={{
