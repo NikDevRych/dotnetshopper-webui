@@ -33,7 +33,9 @@ export default function CreateProduct() {
               hidden
             />
           </Button>
-          <Button color="warning" variant="contained">Create product</Button>
+          <Button color="warning" variant="contained">
+            Create product
+          </Button>
         </Stack>
       </Paper>
     </Container>
