@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import Link from "next/link";
 
 export default function AdminProducts() {
   const handleChangePage = () => {};
@@ -51,13 +52,15 @@ export default function AdminProducts() {
         direction="row"
         sx={{ alignItems: "center", justifyContent: "space-between" }}
       >
-        <Button
-          variant="contained"
-          size="small"
-          startIcon={<KeyboardDoubleArrowDownIcon />}
-        >
-          Insert product
-        </Button>
+        <Link href="/admin/products/create">
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<KeyboardDoubleArrowDownIcon />}
+          >
+            Insert product
+          </Button>
+        </Link>
         <TablePagination
           component="div"
           count={100}
@@ -73,7 +76,7 @@ export default function AdminProducts() {
 
 function TableItem() {
   return (
-    <TableRow>
+    <TableRow hover>
       <TableCell>1</TableCell>
       <TableCell>
         <Image src="/laptop.webp" width={40} height={40} alt="product-image" />
