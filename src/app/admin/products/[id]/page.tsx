@@ -150,132 +150,132 @@ export default function EditProduct({
         <CircularProgress size={100} />;
       </Backdrop>
     );
-  } else {
-    return (
-      <Container maxWidth="sm" sx={{ mt: 2 }}>
-        <Paper elevation={2} sx={{ padding: 2 }}>
-          <Stack
-            direction="column"
-            spacing={2}
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <TextField
-              disabled
-              label="Product ID"
-              variant="standard"
-              type="text"
-              defaultValue={product.id}
-            />
-
-            <Controller
-              name="name"
-              rules={{ required: true }}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  error={errors.name != null}
-                  helperText={errors.name && "Product name is required"}
-                  label="Product name"
-                  variant="standard"
-                  type="text"
-                  {...field}
-                />
-              )}
-            />
-
-            <Controller
-              name="price"
-              rules={{ required: true }}
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  error={errors.price != null}
-                  helperText={errors.price && "Product price is required"}
-                  label="Product price"
-                  variant="standard"
-                  type="number"
-                  {...field}
-                />
-              )}
-            />
-
-            <Controller
-              name="isActive"
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  label="Active"
-                  control={<Checkbox />}
-                  {...field}
-                />
-              )}
-            />
-
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              {product?.imageUrl && (
-                <Image
-                  src={product.imageUrl}
-                  width={100}
-                  height={100}
-                  alt="product-image"
-                />
-              )}
-            </Box>
-
-            <Button
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload files
-              <input
-                type="file"
-                onChange={(event) => setFile(event.target.files?.[0] || null)}
-                hidden
-              />
-            </Button>
-
-            <Button color="warning" variant="contained" type="submit">
-              Update product
-            </Button>
-
-            <Divider>
-              <Chip size="small" label="Dungeon zone" />
-            </Divider>
-
-            <Button color="error" variant="contained" onClick={onRemove}>
-              Remove product
-            </Button>
-
-            {updateSuccess && (
-              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-                Product update successful!
-              </Alert>
-            )}
-
-            {imageError && (
-              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-                Error while upload image, please try leter...
-              </Alert>
-            )}
-
-            {updateError && (
-              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-                Error while update product, please try leter...
-              </Alert>
-            )}
-
-            {removeError && (
-              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-                Error while remove product, please try leter...
-              </Alert>
-            )}
-          </Stack>
-        </Paper>
-      </Container>
-    );
   }
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 2 }}>
+      <Paper elevation={2} sx={{ padding: 2 }}>
+        <Stack
+          direction="column"
+          spacing={2}
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <TextField
+            disabled
+            label="Product ID"
+            variant="standard"
+            type="text"
+            defaultValue={product.id}
+          />
+
+          <Controller
+            name="name"
+            rules={{ required: true }}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                error={errors.name != null}
+                helperText={errors.name && "Product name is required"}
+                label="Product name"
+                variant="standard"
+                type="text"
+                {...field}
+              />
+            )}
+          />
+
+          <Controller
+            name="price"
+            rules={{ required: true }}
+            control={control}
+            render={({ field }) => (
+              <TextField
+                error={errors.price != null}
+                helperText={errors.price && "Product price is required"}
+                label="Product price"
+                variant="standard"
+                type="number"
+                {...field}
+              />
+            )}
+          />
+
+          <Controller
+            name="isActive"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                label="Active"
+                control={<Checkbox />}
+                {...field}
+              />
+            )}
+          />
+
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {product?.imageUrl && (
+              <Image
+                src={product.imageUrl}
+                width={100}
+                height={100}
+                alt="product-image"
+              />
+            )}
+          </Box>
+
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload files
+            <input
+              type="file"
+              onChange={(event) => setFile(event.target.files?.[0] || null)}
+              hidden
+            />
+          </Button>
+
+          <Button color="warning" variant="contained" type="submit">
+            Update product
+          </Button>
+
+          <Divider>
+            <Chip size="small" label="Dungeon zone" />
+          </Divider>
+
+          <Button color="error" variant="contained" onClick={onRemove}>
+            Remove product
+          </Button>
+
+          {updateSuccess && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+              Product update successful!
+            </Alert>
+          )}
+
+          {imageError && (
+            <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+              Error while upload image, please try leter...
+            </Alert>
+          )}
+
+          {updateError && (
+            <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+              Error while update product, please try leter...
+            </Alert>
+          )}
+
+          {removeError && (
+            <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+              Error while remove product, please try leter...
+            </Alert>
+          )}
+        </Stack>
+      </Paper>
+    </Container>
+  );
 }

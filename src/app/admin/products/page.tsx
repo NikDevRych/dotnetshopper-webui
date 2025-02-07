@@ -2,7 +2,9 @@
 
 import {
   Alert,
+  Backdrop,
   Button,
+  CircularProgress,
   Container,
   IconButton,
   Paper,
@@ -31,6 +33,7 @@ export default function AdminProducts() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -49,6 +52,7 @@ export default function AdminProducts() {
   useEffect(() => {
     const getProducts = () => {
       setError(false);
+      setLoading(true);
 
       const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}?count=${rowsPerPage}&skip=${page * 10}`;
       axios
@@ -56,12 +60,33 @@ export default function AdminProducts() {
         .then((res) => {
           setProducts(res.data.products);
           setMaxPages(res.data.maxPages);
+          setLoading(false);
         })
         .catch(() => setError(true));
     };
 
     getProducts();
   }, [page, rowsPerPage]);
+
+  if (error) {
+    return (
+      <Alert
+        sx={{ margin: 2 }}
+        icon={<CloseIcon fontSize="inherit" />}
+        severity="error"
+      >
+        Cant load products, please try leter...
+      </Alert>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Backdrop open={loading}>
+        <CircularProgress size={100} />
+      </Backdrop>
+    );
+  }
 
   return (
     <Container maxWidth="xl" sx={{ mt: 2 }}>
@@ -108,12 +133,6 @@ export default function AdminProducts() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Stack>
-
-      {error && (
-        <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
-          Cant load products, please try leter...
-        </Alert>
-      )}
     </Container>
   );
 }
