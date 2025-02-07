@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Product } from "@/interfaces/product";
@@ -29,6 +30,7 @@ import {
 import axios from "axios";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import ProductInput from "@/interfaces/product-input";
+import { useRouter } from "next/navigation";
 
 export default function EditProduct({
   params,
@@ -39,6 +41,11 @@ export default function EditProduct({
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [updateError, setUpdateError] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [removeError, setRemoveError] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -66,6 +73,10 @@ export default function EditProduct({
   }, [product, reset]);
 
   const onSubmit: SubmitHandler<ProductInput> = async (data: ProductInput) => {
+    setUpdateError(false);
+    setImageError(false);
+    setUpdateSuccess(false);
+
     if (file) {
       const awsS3Url = process.env.NEXT_PUBLIC_AWS_S3_URL;
       const awS3Bucket = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME;
@@ -77,7 +88,8 @@ export default function EditProduct({
         await axios.post(UPLOAD_IMAGE_URL, formData);
         data.imageUrl = `${awsS3Url}/${awS3Bucket}/${file.name}`;
       } catch {
-        console.log("error img");
+        setImageError(true);
+        setUpdateError(true);
         return;
       }
     }
@@ -86,8 +98,21 @@ export default function EditProduct({
 
     try {
       await axios.put(url, data);
+      setUpdateSuccess(true);
     } catch {
-      console.log("error product");
+      setUpdateError(true);
+    }
+  };
+
+  const onRemove = async () => {
+    setRemoveError(false);
+    const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}/${product?.id}`;
+
+    try {
+      await axios.delete(url);
+      router.replace("/admin/products");
+    } catch {
+      setRemoveError(true);
     }
   };
 
@@ -221,9 +246,33 @@ export default function EditProduct({
               <Chip size="small" label="Dungeon zone" />
             </Divider>
 
-            <Button color="error" variant="contained">
+            <Button color="error" variant="contained" onClick={onRemove}>
               Remove product
             </Button>
+
+            {updateSuccess && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                Product update successful!
+              </Alert>
+            )}
+
+            {imageError && (
+              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+                Error while upload image, please try leter...
+              </Alert>
+            )}
+
+            {updateError && (
+              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+                Error while update product, please try leter...
+              </Alert>
+            )}
+
+            {removeError && (
+              <Alert icon={<CloseIcon fontSize="inherit" />} severity="error">
+                Error while remove product, please try leter...
+              </Alert>
+            )}
           </Stack>
         </Paper>
       </Container>
