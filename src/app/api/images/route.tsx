@@ -4,7 +4,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 const awsS3Url = process.env.NEXT_PUBLIC_AWS_S3_URL;
 const awsS3AccessKey = process.env.AWS_S3_ACCESS_KEY;
 const awsS3SecretKey = process.env.AWS_S3_SECRET_KEY;
-const awsS3BucketName = process.env.AWS_S3_BUCKET_NAME;
+const awsS3BucketName = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME;
 
 if (!awsS3Url || !awsS3AccessKey || !awsS3SecretKey || !awsS3BucketName) {
   throw new Error("Not have AWS S3 config!");
@@ -28,11 +28,9 @@ export async function POST(request: Request) {
     return Response.json({ error: "Image file is null." }, { status: 400 });
   }
 
-  const fileName = `${crypto.randomUUID()}.${image.name.split(".")[1]}`;
-
   const command = new PutObjectCommand({
     Bucket: awsS3BucketName,
-    Key: fileName,
+    Key: image.name,
     Body: Buffer.from(await image.arrayBuffer()),
     ContentType: image.type,
   });

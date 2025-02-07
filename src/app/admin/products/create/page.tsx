@@ -50,7 +50,7 @@ export default function CreateProduct() {
 
     if (file) {
       const awsS3Url = process.env.NEXT_PUBLIC_AWS_S3_URL;
-      const awS3Bucket = process.env.AWS_S3_BUCKET_NAME;
+      const awS3Bucket = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME;
 
       const formData = new FormData();
       formData.append(IMAGE_FORM_DATA_KEY, file);

@@ -119,7 +119,6 @@ export default function AdminProducts() {
 }
 
 function TableItem({ product }: Readonly<{ product: Product }>) {
-  console.log(product.imageUrl);
   return (
     <TableRow hover>
       <TableCell>{product.id}</TableCell>
@@ -139,7 +138,7 @@ function TableItem({ product }: Readonly<{ product: Product }>) {
       <TableCell>{product.price}$</TableCell>
 
       <TableCell>
-        <Link href={`/admin/products/${product.id}`}>
+        <Link href={`/admin/products/${product.id}`} scroll={false}>
           <IconButton color="primary">
             <EditIcon />
           </IconButton>
