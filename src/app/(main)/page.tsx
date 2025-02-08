@@ -1,4 +1,4 @@
-import CardList from "@/components/card-list.tsx/card-list";
+import CardList from "@/components/card-list/card-list";
 import { Container } from "@mui/material";
 
 export default function Home() {
