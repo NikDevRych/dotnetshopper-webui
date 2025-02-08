@@ -1,7 +1,12 @@
-import { Box, Pagination } from "@mui/material";
+import { Box } from "@mui/material";
 import CardItem from "../card-item/card-item";
+import { Product } from "@/interfaces/product";
+import ClientPagination from "../pagination/client-pagination";
 
-export default function CardList() {
+export default function CardList({
+  products,
+  maxPages,
+}: Readonly<{ products: Product[]; maxPages: number }>) {
   return (
     <>
       <Box
@@ -13,18 +18,11 @@ export default function CardList() {
         }}
       >
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, padding: 2 }}>
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
+          {products.map((product) => (
+            <CardItem key={product.id} product={product} />
+          ))}
         </Box>
-        <Pagination count={10} size="large" />
+        <ClientPagination maxPages={maxPages} />
       </Box>
     </>
   );

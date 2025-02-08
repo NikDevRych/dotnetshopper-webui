@@ -9,12 +9,18 @@ import {
 } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Image from "next/image";
+import { Product } from "@/interfaces/product";
 
-export default function CardItem() {
+export default function CardItem({ product }: Readonly<{ product: Product }>) {
   return (
     <Card sx={{ width: "240px" }} elevation={2}>
       <CardMedia>
-        <Image src="/laptop.webp" width={240} height={240} alt="product-item" />
+        <Image
+          src={product.imageUrl || "/not-image.png"}
+          width={240}
+          height={240}
+          alt={product.name}
+        />
       </CardMedia>
       <CardContent>
         <Typography
@@ -25,17 +31,17 @@ export default function CardItem() {
           }}
           variant="subtitle1"
         >
-          Product Name its maybe long or not
+          {product.name}
         </Typography>
         <Stack direction="row" spacing={2} sx={{ alignItems: "baseline" }}>
           <Typography variant="h6" color="primary">
-            $299
+            ${product.price}
           </Typography>
           <Typography
             sx={{ textDecoration: "line-through" }}
             variant="subtitle1"
           >
-            $300
+            ${product.price}
           </Typography>
         </Stack>
         <Rating defaultValue={3.5} precision={0.5} readOnly />
