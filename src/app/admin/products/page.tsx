@@ -23,7 +23,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import axios from "axios";
-import { API, PRODUCT } from "@/constants/api-constants";
+import {
+  API,
+  PARAM_COUNT,
+  PARAM_SKIP,
+  PRODUCT,
+} from "@/constants/api-constants";
 import { GetProducts, Product } from "@/interfaces/product";
 import { useEffect, useState } from "react";
 
@@ -54,7 +59,7 @@ export default function AdminProducts() {
       setError(false);
       setLoading(true);
 
-      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}?count=${rowsPerPage}&skip=${page * 10}`;
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}?${PARAM_COUNT}=${rowsPerPage}&${PARAM_SKIP}=${page * 10}`;
       axios
         .get<GetProducts>(url)
         .then((res) => {
