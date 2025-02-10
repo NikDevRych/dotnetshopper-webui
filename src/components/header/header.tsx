@@ -17,10 +17,15 @@ import CategoryMenu from "../category-menu/category-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [searchValue, setSearchValue] = useState("");
   const open = Boolean(anchorEl);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,6 +33,14 @@ export default function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onSearch = () => {
+    if (searchValue === "") return;
+
+    const params = new URLSearchParams(searchParams);
+    params.set("search", searchValue);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
@@ -62,6 +75,9 @@ export default function Header() {
               Category
             </Button>
             <TextField
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(event.target.value)
+              }
               variant="outlined"
               size="small"
               slotProps={{
@@ -74,6 +90,9 @@ export default function Header() {
                 },
               }}
             />
+            <Button onClick={onSearch} variant="contained">
+              Find
+            </Button>
           </Stack>
 
           <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
