@@ -10,12 +10,16 @@ import { GetProducts } from "@/interfaces/product";
 import { Backdrop, CircularProgress, Container } from "@mui/material";
 import axios from "axios";
 
-export default async function Main({
+export default async function MainCategory({
+  params,
   searchParams,
 }: {
+  params: Promise<{ category: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   try {
+    const { category } = await params;
+    // TODO: get products by category
     const { page } = await searchParams;
     const currentPage = Number(page) || 1;
     const skip = (currentPage - 1) * 10;
