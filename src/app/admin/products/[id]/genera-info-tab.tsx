@@ -9,8 +9,6 @@ import {
   Divider,
   Chip,
   Alert,
-  Backdrop,
-  CircularProgress,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
@@ -29,15 +27,8 @@ import {
 import ProductInput from "@/interfaces/product-input";
 import Image from "next/image";
 
-export default function GeneralInfoTab({
-  params,
-}: {
-  params: Promise<{ id: number }>;
-}) {
-  const [product, setProduct] = useState<Product>();
+export default function GeneralInfoTab({ product }: { product: Product }) {
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState(false);
   const [updateError, setUpdateError] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [removeError, setRemoveError] = useState(false);
@@ -113,42 +104,6 @@ export default function GeneralInfoTab({
     }
   };
 
-  useEffect(() => {
-    const getProduct = async () => {
-      setLoading(true);
-      const id = (await params).id;
-      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}/${id}`;
-
-      axios
-        .get<Product>(url)
-        .then((res) => setProduct(res.data))
-        .catch(() => setLoadError(true))
-        .finally(() => setLoading(false));
-    };
-
-    getProduct();
-  }, [params]);
-
-  if (loadError) {
-    return (
-      <Alert
-        sx={{ margin: 2 }}
-        icon={<CloseIcon fontSize="inherit" />}
-        severity="error"
-      >
-        Error while get product, please try leter...
-      </Alert>
-    );
-  }
-
-  if (!product) {
-    return (
-      <Backdrop open={loading}>
-        <CircularProgress size={100} />;
-      </Backdrop>
-    );
-  }
-
   return (
     <Paper elevation={2} sx={{ padding: 2 }}>
       <Stack
@@ -203,7 +158,7 @@ export default function GeneralInfoTab({
           render={({ field }) => (
             <FormControlLabel
               label="Active"
-              control={<Checkbox />}
+              control={<Checkbox defaultChecked={product.isActive} />}
               {...field}
             />
           )}
