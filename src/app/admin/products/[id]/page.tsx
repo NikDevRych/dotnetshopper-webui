@@ -4,6 +4,7 @@ import CustomTabPanel from "@/components/admin/custom-tab-panel/custom-tab-panel
 import GeneralInfoTab from "./genera-info-tab";
 import { useState } from "react";
 import { Container, Box, Tabs, Tab } from "@mui/material";
+import CategoriesTab from "./categories-tab";
 
 export default function EditProduct({
   params,
@@ -27,6 +28,9 @@ export default function EditProduct({
 
       <CustomTabPanel index={0} value={tabValue}>
         <GeneralInfoTab params={params} />
+      </CustomTabPanel>
+      <CustomTabPanel index={1} value={tabValue}>
+        <CategoriesTab />
       </CustomTabPanel>
     </Container>
   );
