@@ -16,7 +16,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import CategoriesTab from "./categories-tab";
 import { Product } from "@/interfaces/product";
 import axios from "axios";
-import { API, PRODUCT } from "@/constants/api-constants";
+import {
+  API,
+  CATEGORY,
+  PARAM_IS_ACTIVE,
+  PARAM_WITH_CATEGORY,
+  PRODUCT,
+} from "@/constants/api-constants";
+import { Category, GetCategories } from "@/interfaces/category";
 
 export default function EditProduct({
   params,
@@ -24,6 +31,7 @@ export default function EditProduct({
   params: Promise<{ id: number }>;
 }) {
   const [product, setProduct] = useState<Product>();
+  const [categories, setCategories] = useState<Category[]>();
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -36,7 +44,7 @@ export default function EditProduct({
     const getProduct = async () => {
       setLoading(true);
       const id = (await params).id;
-      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}/${id}`;
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${PRODUCT}/${id}?${PARAM_WITH_CATEGORY}=${true}`;
 
       axios
         .get<Product>(url)
@@ -45,7 +53,19 @@ export default function EditProduct({
         .finally(() => setLoading(false));
     };
 
+    const getCategories = async () => {
+      setLoading(true);
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_API_URL}/${API}/${CATEGORY}?${PARAM_IS_ACTIVE}=${true}`;
+
+      axios
+        .get<GetCategories>(url)
+        .then((res) => setCategories(res.data.categories))
+        .catch(() => setLoadError(true))
+        .finally(() => setLoading(false));
+    };
+
     getProduct();
+    getCategories();
   }, [params]);
 
   if (loadError) {
@@ -60,7 +80,7 @@ export default function EditProduct({
     );
   }
 
-  if (!product) {
+  if (!product || !categories) {
     return (
       <Backdrop open={loading}>
         <CircularProgress size={100} />;
@@ -81,7 +101,11 @@ export default function EditProduct({
         <GeneralInfoTab product={product} />
       </CustomTabPanel>
       <CustomTabPanel index={1} value={tabValue}>
-        <CategoriesTab />
+        <CategoriesTab
+          productId={product.id}
+          productCategories={product.categories}
+          categories={categories}
+        />
       </CustomTabPanel>
     </Container>
   );
